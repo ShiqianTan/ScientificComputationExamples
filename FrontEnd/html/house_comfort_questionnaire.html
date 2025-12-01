@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热舒适度调查问卷 (Thermal Comfort Survey)</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --hot-color: #e74c3c;
+            --cold-color: #3498db;
+            --bg-color: #f4f6f7;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 10px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        label.main-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* 7-Point Scale Styling */
+        .scale-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .scale-option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .scale-option:hover {
+            background-color: #f0f8ff;
+        }
+
+        .scale-option input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+
+        /* Color coding for the ASHRAE scale */
+        .val-hot { color: #c0392b; font-weight: bold; }
+        .val-warm { color: #d35400; }
+        .val-slight-warm { color: #e67e22; }
+        .val-neutral { color: #27ae60; font-weight: bold; }
+        .val-slight-cool { color: #2980b9; }
+        .val-cool { color: #3498db; }
+        .val-cold { color: #2c3e50; font-weight: bold; }
+
+        /* Input fields */
+        input[type="text"], 
+        input[type="time"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box; /* Fix padding issue */
+        }
+
+        button.submit-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        button.submit-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .citation {
+            font-size: 12px;
+            color: #95a5a6;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>居住者热舒适度调查 (Thermal Comfort Survey)</h1>
+        <p class="subtitle">基于 ASHRAE 标准 55 及 BS EN ISO 7730 七点量表</p>
+    </header>
+
+    <form id="comfortSurveyForm">
+        <div class="form-section">
+            <h2>1. 基本信息 (General Information)</h2>
+            
+            <div class="question">
+                <label class="main-label" for="participantID">参与者 ID / 姓名 (Participant ID):</label>
+                <input type="text" id="participantID" name="participantID" required>
+            </div>
+
+            <div class="question">
+                <label class="main-label" for="surveyTime">当前时间 (Time of Survey):</label>
+                <input type="time" id="surveyTime" name="surveyTime" required>
+                <small style="color: #7f8c8d;">请记录完成问卷的准确时间。</small>
+            </div>
+
+            <div class="question">
+                <label class="main-label" for="activity">您现在的活动状态 (Current Activity Level):</label>
+                <select id="activity" name="activity">
+                    <option value="seated_quiet">坐着/休息 (Seated, quiet)</option>
+                    <option value="standing">站立 (Standing)</option>
+                    <option value="walking">轻度活动/走动 (Light walking)</option>
+                    <option value="working">家务/工作 (House work)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>2. 热感觉 (Thermal Sensation)</h2>
+            <p><strong>问题：您此时此刻感觉如何？</strong> (How are you feeling at this precise moment?)</p>
+            
+            <div class="scale-group">
+                <label class="scale-option">
+                    <input type="radio" name="tsv" value="3" required>
+                    <span class="val-hot">Hot (+3) - 热</span>
+                </label>
+                <label class="scale-option">
+                    <input type="radio" name="tsv" value="2">
+                    <span class="val-warm">Warm (+2) - 温暖</span>
+                </label>
+                <label class="scale-option">
+                    <input type="radio" name="tsv" value="1">
+                    <span class="val-slight-warm">Slightly Warm (+1) - 微暖</span>
+                </label>
+                <label class="scale-option">
+                    <input type="radio" name="tsv" value="0">
+                    <span class="val-neutral">Neutral (0) - 中性/适中</span>
+                </label>
+                <label class="scale-option">
+                    <input type="radio" name="tsv" value="-1">
+                    <span class="val-slight-cool">Slightly Cool (-1) - 微凉</span>
+                </label>
+                <label class="scale-option">
+                    <input type="radio" name="tsv" value="-2">
+                    <span class="val-cool">Cool (-2) - 凉</span>
+                </label>
+                <label class="scale-option">
+                    <input type="radio" name="tsv" value="-3">
+                    <span class="val-cold">Cold (-3) - 冷</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>3. 热偏好与评价 (Preference & Assessment)</h2>
+
+            <div class="question">
+                <label class="main-label">您希望现在的温度如何变化？ (Thermal Preference)</label>
+                <div class="scale-group">
+                    <label class="scale-option"><input type="radio" name="preference" value="much_warmer"> 更热一点 (Much Warmer)</label>
+                    <label class="scale-option"><input type="radio" name="preference" value="warmer"> 热一点 (Warmer)</label>
+                    <label class="scale-option"><input type="radio" name="preference" value="slightly_warmer"> 稍微热一点 (Slightly Warmer)</label>
+                    <label class="scale-option"><input type="radio" name="preference" value="no_change"> 保持不变 (No Change)</label>
+                    <label class="scale-option"><input type="radio" name="preference" value="slightly_cooler"> 稍微凉一点 (Slightly Cooler)</label>
+                    <label class="scale-option"><input type="radio" name="preference" value="cooler"> 凉一点 (Cooler)</label>
+                    <label class="scale-option"><input type="radio" name="preference" value="much_cooler"> 更凉一点 (Much Cooler)</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <label class="main-label">您认为当前环境是否可接受？ (Thermal Acceptability)</label>
+                <div class="scale-group">
+                    <label class="scale-option"><input type="radio" name="acceptability" value="acceptable"> 可接受 (Acceptable)</label>
+                    <label class="scale-option"><input type="radio" name="acceptability" value="unacceptable"> 不可接受 (Unacceptable)</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <label class="main-label">您对当前环境的耐受程度？ (Personal Tolerance)</label>
+                <select name="tolerance" id="tolerance">
+                    <option value="" disabled selected>请选择...</option>
+                    <option value="perfectly_bearable">完全可以忍受 (Perfectly bearable)</option>
+                    <option value="slightly_difficult">稍微难以忍受 (Slightly difficult to bear)</option>
+                    <option value="fairly_difficult">相当难以忍受 (Fairly difficult to bear)</option>
+                    <option value="very_difficult">非常难以忍受 (Very difficult to bear)</option>
+                    <option value="intolerable">无法忍受 (Intolerable)</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">提交问卷 (Submit Survey)</button>
+    </form>
+
+    <div class="citation">
+        <p>Reference: Onyenokporo, N.C., et al. (2024). "The Bottle House: Upcycling Plastic Bottles to Improve the Thermal Performance of Low-Cost Homes". Sustainability.</p>
+    </div>
+</div>
+
+<script>
+    // 简单的脚本用于处理表单提交并打印数据到控制台，模拟数据收集过程
+    document.addEventListener('DOMContentLoaded', () => {
+        // 自动填入当前时间
+        const now = new Date();
+        const timeString = now.toTimeString().split(' ')[0].substring(0,5);
+        document.getElementById('surveyTime').value = timeString;
+
+        const form = document.getElementById('comfortSurveyForm');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            console.log("Survey Data Collected:", data);
+            alert("感谢您的参与！数据已记录（请查看控制台）。\n\nTSV Vote: " + data.tsv);
+        });
+    });
+</script>
+
+</body>
+</html>
